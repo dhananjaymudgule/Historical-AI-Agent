@@ -35,6 +35,8 @@ if user_input:
 
     # Send user input to FastAPI chatbot with session_id
     response = requests.post(API_URL, json={"session_id": st.session_state.session_id, "message": user_input})
+
+
     
     bot_reply = response.json().get("reply", "I didn't understand that.")
 
