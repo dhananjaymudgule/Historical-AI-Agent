@@ -2,7 +2,13 @@ from pydantic_settings import BaseSettings
 from typing import Optional
 
 class Settings(BaseSettings):
-    app_name: str = "Historical Monuments Bot"
+
+    # General settings
+    VERSION: str = "1.0.0"
+    HOST: str = "127.0.0.1"
+    PORT: int = 8000
+    PROJECT_NAME: str = "Historical Monuments Bot"
+    PROJECT_DESCRIPTION: str = "Historical Monuments Bot"
 
     # email config
     EMAIL_SENDER: str
