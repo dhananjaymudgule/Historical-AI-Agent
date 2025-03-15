@@ -1,0 +1,9 @@
+fastapi 
+uvicorn 
+langchain 
+langgraph 
+pydantic 
+pydantic-settings
+python-multipart 
+aiosmtplib
+pydantic[email]
