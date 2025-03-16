@@ -29,11 +29,11 @@ def chat_endpoint(request: ChatRequest):
     chatbot.chat_history = chat_histories[session_id]
 
     # Process user message
-    reply = chatbot.handle_message(request.message)
+    response = chatbot.handle_message(request.message)
 
     # Update session chat history
     chat_histories[session_id] = chatbot.chat_history  
 
-    return {"reply": reply}
+    return {"response": response}
 
 
