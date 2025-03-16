@@ -4,7 +4,7 @@ import uuid  # Generate unique session IDs
 
 # FastAPI Backend URL
 # API_URL = "http://127.0.0.1:8000/chat/"  
-API_URL="https://historical-ai-agent.onrender.com"
+API_URL="https://historical-ai-agent.onrender.com/chat/"
 
 # Streamlit UI Setup
 st.set_page_config(page_title="Historical Chatbot", layout="wide", page_icon="🤖")
