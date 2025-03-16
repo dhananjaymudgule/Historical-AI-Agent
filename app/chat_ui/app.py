@@ -7,7 +7,7 @@ import uuid  # Generate unique session IDs
 API_URL="https://historical-ai-agent.onrender.com/chat/"
 
 # Streamlit UI Setup
-st.set_page_config(page_title="Historical Chatbot", layout="wide", page_icon="🤖")
+st.set_page_config(page_title="Historical Chatbot", page_icon="🤖")
 
 st.title("🤖 Historical Chatbot")
 st.write("Ask anything about historical monuments!")
