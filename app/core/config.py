@@ -10,10 +10,6 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "Historical Monuments Bot"
     PROJECT_DESCRIPTION: str = "Historical Monuments Bot"
 
-    # API base url
-
-    API_BASE_URL: str
-
     # email config
     EMAIL_SENDER: str
     EMAIL_PASSWORD: str
