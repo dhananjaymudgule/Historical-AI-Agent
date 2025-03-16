@@ -52,8 +52,6 @@ def chatbot(state: State):
     # Invoke LLM with history
     response = llm_with_tools.invoke(messages)
 
-    print(f"🔍 LLM Response: {response}")  # Debugging output
-
     # Check if LLM wants to call a function
     function_call = response.additional_kwargs.get("function_call")
     if function_call:
@@ -64,7 +62,6 @@ def chatbot(state: State):
         tool_function = next((t for t in tools if t.__name__ == function_name), None)
 
         if tool_function:
-            print(f"🚀 Executing Tool: {function_name} with arguments {function_args}")  # Debugging
             tool_response = tool_function(**function_args)  # Execute the tool
 
             # Ensure tool_response is a string before appending to messages
@@ -73,7 +70,6 @@ def chatbot(state: State):
 
             messages.append(AIMessage(content=tool_response))  # Append tool response
         else:
-            print(f"❌ Tool {function_name} not found!")  # Debugging
             messages.append(AIMessage(content=f"Error: Tool {function_name} not found."))
     else:
         # Normal LLM response

@@ -39,10 +39,9 @@ def send_otp(email: str):
             server.starttls()
             server.login(email_sender, email_password)
             server.send_message(message)
-        # print(f"OTP sent successfully to {email}")
-        return f"OTP sent successfully to {email}"
+        return "Thanks! I have sent a 6-digit code to your email. Please confirm by entering the code."
+
     except Exception as e:
-        # print(f"Failed to send OTP: {e}")
         return f"Failed to send OTP: {e}"
 
 
@@ -61,7 +60,7 @@ def verify_otp(email: str, otp: str) -> str:
         str: A message confirming OTP verification or failure.
     """
     if otp_storage.get(email) == otp:
-        return f"OTP verification successful for {email}!"
+        return "Great, thanks! I'll send you an email soon. Take care!"
     return "Invalid OTP. Please try again."
 
 
