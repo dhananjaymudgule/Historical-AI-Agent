@@ -1,3 +1,5 @@
+# app/chat_ui/app.py
+
 import streamlit as st
 import requests
 import uuid  # Generate unique session IDs

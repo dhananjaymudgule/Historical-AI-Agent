@@ -1,69 +1,147 @@
-# Historical-AI-Agent
+# Historical AI Agent
+
+## Overview
+The **Historical AI Agent** is a FastAPI-based conversational AI system designed to provide information about historical monuments. It supports real-time chat with session-based memory and integrates AI-powered agents for enhanced interactions.
+
+## Features
+- FastAPI backend with modular structure
+- Chatbot service for user interactions
+- AI agent integration using LangGraph
+- Streamlit-based frontend UI
+- Session-based chat history
+- CORS-enabled for frontend communication
+- OTP-based email verification
+- Scalable and extensible architecture
+
+## Installation
+
+### Prerequisites
+Ensure you have the following installed:
+- Python 3.12+
+- Virtual Environment (optional but recommended)
+
+### Steps
+```bash
+# Clone the repository
+git clone https://github.com/your-repo/historical-ai-agent.git
+cd historical-ai-agent
+
+# Create a virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+## Environment Variables
+Create a `.env` file in the root directory and configure the following environment variables:
+
+```ini
+EMAIL_SENDER="your-email@gmail.com"
+SMTP_SERVER="smtp.gmail.com"
+SMTP_PORT="587"
+EMAIL_PASSWORD="your-email-password"
+
+GEMINI_LLM_MODEL_NAME="your-gemini-model"
+GEMINI_API_KEY="your-gemini-api-key"
+```
+
+## Running the Project
+
+### Start FastAPI Backend
+```bash
+# Run the FastAPI application
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+### Start Streamlit Frontend
+```bash
+# Navigate to chat UI directory
+cd app/chat_ui
+
+# Run the Streamlit app
+streamlit run app.py
+```
+
+The API will be accessible at:
+- **Docs:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+- **Redoc:** [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
+
+The frontend will be accessible at:
+- **Streamlit UI:** [http://localhost:8501](http://localhost:8501)
+
+## API Endpoints
+
+| Method | Endpoint      | Description                     |
+|--------|-------------|---------------------------------|
+| GET    | `/`         | Health check                    |
+| POST   | `/chat`     | Chatbot interaction             |
+| POST   | `/agent`    | AI agent interaction            |
+
+## Project Structure
+```
+HISTORICAL-AI-AGENT/
+│── app/
+│   ├── api/
+│   │   ├── routes/
+│   │   │   ├── chat.py
+│   │   │   ├── agent.py
+│   │── chat_ui/
+│   │   ├── app.py  # Streamlit UI
+│   │── core/
+│   │   ├── config.py
+│   │   ├── security.py
+│   │── models/
+│   │   ├── user.py
+│   │── prompts/
+│   │   ├── chatbot_prompts.py
+│   │── schemas/
+│   │   ├── chat.py
+│   │   ├── email.py
+│   │── services/
+│   │   ├── chat_service.py
+│   │   ├── agent_service.py
+│   │   ├── email_service.py
+│── main.py
+│── requirements.txt
+│── Dockerfile
+│── README.md
+```
+
+## How It Works
+
+### Chatbot Service (`chat_service.py`)
+- Uses **Gemini LLM** for natural language processing.
+- Maintains session-based chat history.
+- Detects when to invoke tools (OTP-based email verification).
+- Uses **LangGraph** for workflow orchestration.
+
+### Agent Service (`agent_service.py`)
+- Uses **Gemini LLM** with **LangGraph** for structured interactions.
+- Can access external tools like email verification.
+- Maintains chat history persistently.
+
+### Streamlit UI (`chat_ui/app.py`)
+- Provides an interactive frontend for user interaction.
+- Sends user messages to FastAPI backend (`/agent` endpoint).
+- Maintains chat history per session using `session_id`.
+
+### OTP Verification Flow
+1. The chatbot requests the user's email.
+2. It calls `send_otp(email: str)` to send an OTP.
+3. The user enters the OTP.
+4. The chatbot verifies using `verify_otp(email: str, otp: str)`.
+5. If valid, confirmation is sent; otherwise, the user is asked to retry.
+
+## Future Enhancements
+- Improve agent capabilities using additional AI tools.
+- Implement database storage for long-term session memory.
+- Enhance Streamlit UI with a more user-friendly design.
+- Deploy on cloud platforms like AWS or GCP.
+
+## License
+This project is licensed under the ** License.
 
 
-Both `chat_service.py` and `agent_service.py` implement conversational AI using **Gemini LLM** and **LangGraph**, but they take different approaches in structuring the chatbot. Here's a breakdown of their differences:
 
----
-
-### **1️⃣ Chat Service (`chat_service.py`): LangGraph with Tool Nodes**
-#### **How it Works:**
-- Uses **LangGraph** explicitly to build a stateful chatbot workflow.
-- Maintains **conversation history (`messages` list)** throughout interactions.
-- Defines a **state schema (`State`)** using `TypedDict` to ensure structured inputs.
-- **Tool invocation**:
-  - The chatbot first processes the input message.
-  - If the response requires calling a function (tool), it executes it and appends the result to the conversation.
-  - Otherwise, it returns the LLM's response.
-- Implements **a structured workflow** with:
-  - **Nodes** (`assistant` and `tools`).
-  - **Edges** (directing flow between nodes).
-- Stores **conversation history persistently** in `ChatService`.
-
-#### **Pros:**
-✅ **More structured and scalable**: Uses a modular, graph-based approach.  
-✅ **Better control over tool execution**: Explicit handling of function calls.  
-✅ **Retains chat history** across messages.  
-✅ **Easier debugging** with clear function call execution tracking.  
-
-#### **Cons:**
-❌ Slightly more complex setup due to explicit state handling and LangGraph edges.  
-❌ Requires manually managing the flow between nodes.
-
----
-
-### **2️⃣ Agent Service (`agent_service.py`): LangGraph's `create_react_agent`**
-#### **How it Works:**
-- Uses `create_react_agent`, a **prebuilt LangGraph agent** for reasoning and action execution.
-- No explicit conversation state management.
-- Defines **tools** (`send_otp`, `verify_otp`) and passes them directly to the agent.
-- The **agent internally decides** whether to call a tool or respond normally.
-- Uses `SYSTEM_PROMPT` as a **state modifier**.
-- Simply **invokes the agent** with the user query (`state={"messages": query}`).
-
-#### **Pros:**
-✅ **Easier to implement**: Uses a high-level agent API with minimal manual state handling.  
-✅ **Less boilerplate**: No need to define state management explicitly.  
-✅ **More natural tool usage**: The agent decides when to call tools.  
-
-#### **Cons:**
-❌ **Less control over execution flow**: You can't define explicit transitions like in LangGraph.  
-❌ **No explicit chat history**: You'd need to handle persistence separately.  
-❌ **Debugging is harder**: No clear function execution tracking.  
-
----
-
-### **Which One is Better?**
-| Feature                  | **Chat Service (`chat_service.py`)** | **Agent Service (`agent_service.py`)** |
-|--------------------------|--------------------------------------|--------------------------------------|
-| **Ease of Implementation** | ❌ More setup required              | ✅ Simpler, fewer lines of code |
-| **Scalability**            | ✅ Highly modular & structured       | ❌ Less modular, relies on agent internals |
-| **Control Over Workflow**  | ✅ Explicit node transitions         | ❌ Agent decides actions |
-| **Tool Invocation**        | ✅ Manual, explicit execution        | ✅ Automatic but less controllable |
-| **Chat History Handling**  | ✅ Persistent across messages       | ❌ Needs external storage |
-| **Debugging**              | ✅ Clear execution tracking          | ❌ Harder to debug |
-
-#### **Best Choice?**
-- **For a simple chatbot with tool usage** → `agent_service.py` (easier to set up).
-- **For a production-ready, scalable chatbot with structured workflow** → `chat_service.py` (better control and history handling).
-
-🚀 **If you're building a serious Gen AI application, `chat_service.py` is the better choice!**
