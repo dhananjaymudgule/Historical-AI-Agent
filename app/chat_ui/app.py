@@ -10,10 +10,12 @@ load_dotenv()
 
 # FastAPI Backend URL
 # local 
-# API_BASE_URL = "http://127.0.0.1:8000/"
+API_BASE_URL = "http://127.0.0.1:8000/"
 # cloud
-API_BASE_URL = os.getenv("API_BASE_URL")
-API_ENDPOINT = f"{API_BASE_URL}/chat/" 
+# API_BASE_URL = os.getenv("API_BASE_URL")
+# API_ENDPOINT = f"{API_BASE_URL}/chat/" 
+API_ENDPOINT = f"{API_BASE_URL}/agent/"  
+
 
 
 # Streamlit UI Setup

@@ -2,8 +2,10 @@
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.routes import chat
+
 from app.core.config import settings
+from app.api.routes import chat
+from app.api.routes import agent
 
 
 # Initialize FastAPI app
@@ -25,7 +27,13 @@ app.add_middleware(
 
 
 # Include API routers
+
+# chat endpoint (using langgraph)
 app.include_router(chat.router, prefix="/chat", tags=["chat"])
+
+#agent endpoint 
+app.include_router(agent.router, prefix="/agent", tags=["agent"])
+
 
 # Root endpoint
 @app.get("/", tags=["Health Check"])
