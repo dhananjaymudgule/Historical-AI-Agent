@@ -3,10 +3,14 @@ import requests
 import uuid  # Generate unique session IDs
 
 # FastAPI Backend URL
-API_URL = "http://127.0.0.1:8000/chat/"  
+API_BASE_URL="http://127.0.0.1:8000"  
+
+# API_ENDPOINT = f"{API_BASE_URL}/chat/"  
+API_ENDPOINT = f"{API_BASE_URL}/agent/"  
+
 
 # Streamlit UI Setup
-st.set_page_config(page_title="Historical Chatbot", layout="wide", page_icon="🤖")
+st.set_page_config(page_title="Historical Chatbot", page_icon="🤖")
 
 st.title("🤖 Historical Chatbot")
 st.write("Ask anything about historical monuments!")
@@ -34,11 +38,11 @@ if user_input:
         st.markdown(user_input)
 
     # Send user input to FastAPI chatbot with session_id
-    response = requests.post(API_URL, json={"session_id": st.session_state.session_id, "message": user_input})
+    response = requests.post(API_ENDPOINT, json={"session_id": st.session_state.session_id, "message": user_input})
 
 
     
-    bot_reply = response.json().get("reply", "I didn't understand that.")
+    bot_reply = response.json().get("response", "I didn't understand that.")
 
     # Display bot response
     st.session_state.messages.append({"role": "assistant", "content": bot_reply})

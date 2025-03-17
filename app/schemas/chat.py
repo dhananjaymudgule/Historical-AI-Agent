@@ -7,4 +7,4 @@ class ChatRequest(BaseModel):
     message: str
 
 class ChatResponse(BaseModel):
-    reply: str
+    response: str

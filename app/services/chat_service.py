@@ -23,12 +23,7 @@ from app.prompts.chatbot_prompts import SYSTEM_PROMPT
 gemini_llm = ChatGoogleGenerativeAI(
     google_api_key=settings.GEMINI_API_KEY,
     model=settings.GEMINI_LLM_MODEL_NAME,
-    temperature=0,
-    max_output_tokens=8192,
-    timeout=None,
-    max_retries=2,
-    top_p=0.6,
-    top_k=8
+    temperature=0
 )
 
 # OTP storage (Temporary)
