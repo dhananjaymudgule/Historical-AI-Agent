@@ -1,10 +1,11 @@
+# app/services/email_service.py
+
 import random
-
-
 import smtplib
 from email.message import EmailMessage
 
 from app.core.config import settings
+from app.utils.otp import generate_otp
 
 
 smtp_server = settings.SMTP_SERVER
@@ -27,17 +28,17 @@ def send_otp(email: str):
     Returns:
         None
     """
-    otp = f"{random.randint(100000, 999999)}"
+    otp = generate_otp()
     otp_storage[email] = otp
     message = EmailMessage()
-    message["From"] = email_sender
+    message["From"] = settings.EMAIL_SENDER
     message["To"] = email
     message["Subject"] = "Your OTP Code"
     message.set_content(f"Your OTP code is {otp}")
     try:
-        with smtplib.SMTP(smtp_server, smtp_port) as server:
+        with smtplib.SMTP(settings.SMTP_SERVER, settings.SMTP_PORT) as server:
             server.starttls()
-            server.login(email_sender, email_password)
+            server.login(settings.EMAIL_SENDER, settings.EMAIL_PASSWORD)
             server.send_message(message)
         return "Thanks! I have sent a 6-digit code to your email. Please confirm by entering the code."
 
