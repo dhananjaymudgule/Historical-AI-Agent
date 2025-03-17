@@ -62,16 +62,26 @@ pip install -r requirements.txt
 ```
 
 ### **3️⃣ Set Up Environment Variables**
-Create a `.env` file in the project root:
-```
-EMAIL_SENDER=your-email@gmail.com
+Create a `.env` file in the project root by referring to `.env.example` and update it with your credentials.
+
+```ini
+# API Configuration
+VERSION=1.0.0
+HOST=127.0.0.1
+PORT=8000
+PROJECT_NAME="Historical Monuments Bot"
+PROJECT_DESCRIPTION="Historical Monuments Bot"
+
+# Email Configuration
+EMAIL_SENDER=your_email@example.com
 SMTP_SERVER=smtp.gmail.com
 SMTP_PORT=587
-EMAIL_PASSWORD=your-email-password
+EMAIL_PASSWORD=your_email_password
 
-GEMINI_LLM_MODEL_NAME=your-gemini-model
-GEMINI_API_KEY=your-gemini-api-key
-```
+# AI Model Configuration
+GEMINI_LLM_MODEL_NAME=gemini-2.0-flash
+GEMINI_API_KEY=your_gemini_api_key_here
+
 
 ## 🏃‍♂️ Running the Project
 
